@@ -30,21 +30,34 @@ exports.findById = function(req,res){
 
 	var conn = mysql.createConnection({
 
-	host 		: "mysql.theyounus.com",
+	host 		: "mysql.truckjee.com",
 	user 		: "theyounuscom",
 	password	: "NLch-*iL",
 	database 	: "gps_database_younus",
 
 	});
 	conn.connect();
-
+	var record = [];
 	var imei = req.params.id;
 	// console.log(imei);
 	conn.query('SELECT * from `'+imei+'` ORDER BY `id` DESC LIMIT 1',function(err,results){
 		if(err){
 			res.send(error)
 		} 
-		res.send(results);
+		record.push({
+			id 		: results[0].id,
+			imei	: results[0].imei,
+			lat		: results[0].lat,
+			long	: results[0].long,
+			speed	: results[0].speed,
+			course	: results[0].course,
+			mcc		: results[0].mcc,
+			mnc		: results[0].mnc,
+			lac		: results[0].lac,
+			cell_id	: results[0].cell_id,
+			server_time : results[0].server_time.toString()
+		});
+		res.send(record);
 	});
 
 	conn.end();
